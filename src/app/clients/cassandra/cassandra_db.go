@@ -17,26 +17,23 @@ var (
 	password = os.Getenv(cassandraOAuthPassword)
 	host     = os.Getenv(cassandraOAuthHost)
 	keyspace = os.Getenv(cassandraOAuthKeyspace)
-	cluster  *gocql.ClusterConfig
+	session  *gocql.Session
 )
 
 func init() {
-	cluster = gocql.NewCluster(host)
+	cluster := gocql.NewCluster(host)
 	cluster.Keyspace = keyspace
 	cluster.Consistency = gocql.Quorum
 	cluster.Authenticator = gocql.PasswordAuthenticator{
 		Username: username,
 		Password: password,
 	}
-	session, err := cluster.CreateSession()
-
-	if err != nil {
+	var err error
+	if session, err = cluster.CreateSession(); err != nil {
 		panic(err)
 	}
-
-	defer session.Close()
 }
 
-func GetSession() (*gocql.Session, error) {
-	return cluster.CreateSession()
+func GetSession() *gocql.Session {
+	return session
 }

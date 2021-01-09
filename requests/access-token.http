@@ -1,1 +1,13 @@
-GET http://localhost:8080/oauth/access_token/123
+### Create Access Token
+POST http://localhost:8080/oauth/access_token
+Content-Type: application/json
+
+{
+  "access_token": "abc123",
+  "user_id": 1,
+  "client_id": 2,
+  "expires": 123
+}
+
+### Get Access Token
+GET http://localhost:8080/oauth/access_token/abc123
