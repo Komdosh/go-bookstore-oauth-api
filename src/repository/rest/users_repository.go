@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	UsersBaseURL = "http://127.0.0.1:8080"
+	usersBaseURL = "http://127.0.0.1:8081"
 )
 
 var (
@@ -33,12 +33,12 @@ func (r usersRepository) LoginUser(email string, password string) (*users.User, 
 
 	var restErr *errors_utils.RestErr
 	var user users.User
-	_, err := usersRestClient.R().SetBody(request).SetError(&restErr).SetResult(&user).Post(UsersBaseURL + "/users/login")
+	_, err := usersRestClient.R().SetBody(request).SetError(&restErr).SetResult(&user).Post(usersBaseURL + "/users/login")
 	if err != nil {
-		if restErr != nil {
-			return nil, restErr
-		}
 		return nil, errors_utils.NewInternalServerError("error while login user")
+	}
+	if restErr != nil {
+		return nil, restErr
 	}
 
 	return &user, nil

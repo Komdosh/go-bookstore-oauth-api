@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
   "access_token": "abc123",
-  "user_id": 1,
-  "client_id": 2,
-  "expires": 123
+  "username": "komdosh@yandex.ru",
+  "password": "0",
+  "grant_type": "password"
 }
 
 ### Get Access Token
