@@ -2,8 +2,8 @@ package access_token
 
 import (
 	"fmt"
-	"github.com/Komdosh/go-bookstore-oauth-api/src/utils/errors_utils"
-	"github.com/Komdosh/go-bookstore-users-api/utils/crypto_utils"
+	"github.com/Komdosh/go-bookstore-utils/crypto_utils"
+	"github.com/Komdosh/go-bookstore-utils/rest_errors"
 	"strings"
 	"time"
 )
@@ -30,22 +30,22 @@ type AccessTokenRequest struct {
 	Password string `json:"password"`
 }
 
-func (at *AccessTokenRequest) Validate() *errors_utils.RestErr {
+func (at *AccessTokenRequest) Validate() rest_errors.RestErr {
 	switch at.GrantType {
 	case grantTypePassword:
 		at.Username = strings.TrimSpace(at.Username)
 		at.Password = strings.TrimSpace(at.Password)
 		if at.Username == "" {
-			return errors_utils.NewBadRequestError("invalid username")
+			return rest_errors.NewBadRequestError("invalid username")
 		}
 		if at.Password == "" {
-			return errors_utils.NewBadRequestError("invalid password")
+			return rest_errors.NewBadRequestError("invalid password")
 		}
 		break
 	case grantTypeClientCredentials:
-		return errors_utils.NewBadRequestError("client_credentials grant type does not supported yet")
+		return rest_errors.NewBadRequestError("client_credentials grant type does not supported yet")
 	default:
-		return errors_utils.NewBadRequestError("invalid grant_type parameter")
+		return rest_errors.NewBadRequestError("invalid grant_type parameter")
 	}
 
 	return nil
@@ -58,19 +58,19 @@ func GetNewAccessToken(userId int64) AccessToken {
 	}
 }
 
-func (at AccessToken) Validate() *errors_utils.RestErr {
+func (at AccessToken) Validate() rest_errors.RestErr {
 	accessTokenId := strings.TrimSpace(at.AccessToken)
 	if len(accessTokenId) == 0 {
-		return errors_utils.NewBadRequestError("invalid access token")
+		return rest_errors.NewBadRequestError("invalid access token")
 	}
 	if at.UserId < 0 {
-		return errors_utils.NewBadRequestError("invalid userId")
+		return rest_errors.NewBadRequestError("invalid userId")
 	}
 	if at.ClientId < 0 {
-		return errors_utils.NewBadRequestError("invalid clientId")
+		return rest_errors.NewBadRequestError("invalid clientId")
 	}
 	if at.Expires < 0 {
-		return errors_utils.NewBadRequestError("invalid expiration time")
+		return rest_errors.NewBadRequestError("invalid expiration time")
 	}
 	return nil
 }
