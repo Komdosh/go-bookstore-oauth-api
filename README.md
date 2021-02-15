@@ -1,2 +1,3 @@
 # go-bookstore-oauth-api
-OAuth API for go microservices course
+
+Go Bookstore Microservices. This repository contains OAuth API microservice.
